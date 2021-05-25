@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'red_artisan/core_image/processor'
 
 module Technoweenie # :nodoc:
@@ -6,8 +7,8 @@ module Technoweenie # :nodoc:
       module CoreImageProcessor
         def self.included(base)
           base.send :extend, ClassMethods
-          base.alias_method :process_attachment_without_processing, :process_attachment
-          base.alias_method :process_attachment, :process_attachment_with_processing
+          base.send :alias_method, :process_attachment_without_processing, :process_attachment
+          base.send :alias_method, :process_attachment, :process_attachment_with_processing
         end
         
         module ClassMethods
@@ -31,8 +32,8 @@ module Technoweenie # :nodoc:
           def resize_image(img, size)
             processor = ::RedArtisan::CoreImage::Processor.new(img)
             size = size.first if size.is_a?(Array) && size.length == 1
-            if size.is_a?(Fixnum) || (size.is_a?(Array) && size.first.is_a?(Fixnum))
-              if size.is_a?(Fixnum)
+            if size.is_a?(Integer) || (size.is_a?(Array) && size.first.is_a?(Integer))
+              if size.is_a?(Integer)
                 processor.fit(size)
               else
                 processor.resize(size[0], size[1])
